@@ -14,6 +14,9 @@ export interface GrokRequest {
   systemPromptName: string;
   grokModelOptionId: string;
   conversationId: string;
+  enableSideBySide: boolean;
+  isDeepsearch: boolean;
+  isReasoning: boolean;
   returnSearchResults: boolean;
   returnCitations: boolean;
   promptMetadata: {
@@ -25,6 +28,7 @@ export interface GrokRequest {
     eagerTweets: boolean;
     serverHistory: boolean;
   };
+  toolOverrides: any;
 }
 
 // Types for the user-facing API
@@ -38,6 +42,8 @@ export interface GrokChatOptions {
   conversationId?: string; // Optional - will create new if not provided
   returnSearchResults?: boolean;
   returnCitations?: boolean;
+  isDeepsearch?: boolean;
+  isReasoning?: boolean;
 }
 
 // Internal types for API requests
@@ -116,20 +122,24 @@ export async function grokChat(
 
   const payload: GrokRequest = {
     responses,
-    systemPromptName: '',
-    grokModelOptionId: 'grok-2a',
     conversationId,
-    returnSearchResults: options.returnSearchResults ?? true,
-    returnCitations: options.returnCitations ?? true,
+    enableSideBySide: false,
+    grokModelOptionId: 'grok-3',
+    imageGenerationCount: 4,
+    isDeepsearch: options.isDeepsearch ?? false,
+    isReasoning: options.isReasoning ?? false,
     promptMetadata: {
       promptSource: 'NATURAL',
       action: 'INPUT',
     },
-    imageGenerationCount: 4,
     requestFeatures: {
       eagerTweets: true,
       serverHistory: true,
     },
+    returnCitations: options.returnCitations ?? true,
+    returnSearchResults: options.returnSearchResults ?? true,
+    systemPromptName: '',
+    toolOverrides: {},
   };
 
   const res = await requestApi<{ text: string }>(

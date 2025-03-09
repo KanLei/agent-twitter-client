@@ -334,6 +334,8 @@ interface GrokChatOptions {
   conversationId?: string;
   returnSearchResults?: boolean;
   returnCitations?: boolean;
+  isDeepsearch?: boolean;
+  isReasoning?: boolean;
 }
 
 interface GrokChatResponse {
