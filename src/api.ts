@@ -78,6 +78,8 @@ export async function requestApi<T>(
 
     await updateCookieJar(auth.cookieJar(), res.headers);
 
+    console.log(`---------------- requesting ----------------`);
+
     if (res.status === 429) {
       /*
       Known headers at this point:
@@ -87,6 +89,9 @@ export async function requestApi<T>(
       */
       const xRateLimitRemaining = res.headers.get('x-rate-limit-remaining');
       const xRateLimitReset = res.headers.get('x-rate-limit-reset');
+      console.log('url: ', url);
+      console.log('xRateLimitRemaining: ', xRateLimitRemaining);
+      console.log('xRateLimitReset: ', xRateLimitReset);
       if (xRateLimitRemaining == '0' && xRateLimitReset) {
         const currentTime = new Date().valueOf() / 1000;
         const timeDeltaMs = 1000 * (parseInt(xRateLimitReset) - currentTime);
